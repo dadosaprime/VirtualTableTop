@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VirtualTableTop Test</title>
+  <style>
+    :root { --bg: #f6f3ee; --fg: #1d1b19; --card: #ffffff; --accent: #8a3b12; --muted: #6b645c; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #161412; --fg: #ece7e1; --card: #221f1c; --accent: #e08a52; --muted: #a39b92; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; }
+    main { max-width: 640px; margin: 0 auto; padding: 32px 16px; }
+    h1 { margin: 0 0 4px; font-size: 1.8rem; }
+    p.sub { margin: 0 0 24px; color: var(--muted); }
+    .card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+    .dice { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    button { border: 0; border-radius: 8px; padding: 10px 14px; font: inherit; font-weight: 600;
+             background: var(--accent); color: #fff; cursor: pointer; }
+    button:active { transform: scale(.97); }
+    #result { font-size: 3rem; font-weight: 700; text-align: center; min-height: 4.5rem; }
+    #log { list-style: none; padding: 0; margin: 16px 0 0; color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>VirtualTableTop</h1>
+    <p class="sub">Test page — pick a die and roll.</p>
+    <div class="card">
+      <div class="dice" id="dice"></div>
+      <div id="result">—</div>
+      <ul id="log"></ul>
+    </div>
+  </main>
+  <script>
+    const sides = [4, 6, 8, 10, 12, 20, 100];
+    const diceEl = document.getElementById('dice');
+    const resultEl = document.getElementById('result');
+    const logEl = document.getElementById('log');
+    sides.forEach(n => {
+      const b = document.createElement('button');
+      b.textContent = 'd' + n;
+      b.onclick = () => {
+        const roll = 1 + Math.floor(Math.random() * n);
+        resultEl.textContent = roll;
+        const li = document.createElement('li');
+        li.textContent = `d${n} → ${roll}`;
+        logEl.prepend(li);
+        while (logEl.children.length > 10) logEl.lastChild.remove();
+      };
+      diceEl.appendChild(b);
+    });
+  </script>
+</body>
+</html>
